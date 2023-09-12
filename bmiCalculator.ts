@@ -1,10 +1,6 @@
-import { parseArguments } from "./utils";
+import {  parseBmiCalculatorArguments } from "./utils";
 
 function calculateBmi(cm: number, kg: number): string {
-  if (cm <= 0) throw new Error("Error: You need to specify a valid height in centimeters");
-
-  if (kg <= 0) throw new Error("You need to specify a valid weight in kilograms");
-
   const centimeterToMeter = cm / 100;
 
   const bmi = parseFloat((kg / Math.pow(centimeterToMeter, 2)).toFixed(1));
@@ -35,8 +31,8 @@ function calculateBmi(cm: number, kg: number): string {
 }
 
 try {
-  const { value1, value2 } = parseArguments(process.argv);
-  console.log(calculateBmi(value1, value2));
+  const { cm, kg } = parseBmiCalculatorArguments(process.argv);
+  console.log(calculateBmi(cm, kg));
 } catch (error: unknown) {
   let errorMessage = "Something went wrong:";
 

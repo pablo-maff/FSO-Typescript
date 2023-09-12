@@ -1,3 +1,5 @@
+import { parseExerciseCalculatorArguments } from "./utils";
+
 interface ExerciseReport {
   periodLength: number;
   trainingDays: number;
@@ -8,7 +10,7 @@ interface ExerciseReport {
   average: number;
 }
 
-function calculateExercises (dailyExerciseHours: number[], targetDailyAverageExerciseHours: number) : ExerciseReport {
+function calculateExercises (targetDailyAverageExerciseHours: number, dailyExerciseHours: number[]) : ExerciseReport {
   const periodLength = dailyExerciseHours.length;
 
   const trainingDays = dailyExerciseHours.filter(dailyHours => dailyHours > 0).length;
@@ -44,4 +46,15 @@ function calculateExercises (dailyExerciseHours: number[], targetDailyAverageExe
   return exerciseReport
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const { targetDailyAverageExerciseHours, dailyExerciseHours } = parseExerciseCalculatorArguments(process.argv);
+  console.log(calculateExercises(targetDailyAverageExerciseHours, dailyExerciseHours));
+} catch (error: unknown) {
+  let errorMessage = "Something went wrong:";
+
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+
+  console.error(errorMessage);
+}

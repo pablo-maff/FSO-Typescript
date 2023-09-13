@@ -1,6 +1,6 @@
 import {  parseBmiCalculatorArguments } from "./utils";
 
-function calculateBmi(cm: number, kg: number): string {
+export function calculateBmi(cm: number, kg: number): string {
   const centimeterToMeter = cm / 100;
 
   const bmi = parseFloat((kg / Math.pow(centimeterToMeter, 2)).toFixed(1));

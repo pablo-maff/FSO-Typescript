@@ -4,14 +4,17 @@ interface ParsedBmiValues {
 }
 
 export function parseBmiCalculatorArguments(args: string[]): ParsedBmiValues {
-  if (args.length < 4) throw new Error("Not enough arguments");
-  if (args.length > 4) throw new Error("Too many arguments");
+  if (args.length < 2) throw new Error("Not enough arguments");
+  if (args.length > 2) throw new Error("Too many arguments");
 
-  const allArgsAreNumbers = !isNaN(Number(args[2])) && !isNaN(Number(args[3]));
+  const cmString = args[0]
+  const kgString = args[1]
+
+  const allArgsAreNumbers = !isNaN(Number(cmString)) && !isNaN(Number(kgString));
 
   if (allArgsAreNumbers) {
-    const cm = Number(args[2]);
-    const kg = Number(args[3]);
+    const cm = Number(cmString);
+    const kg = Number(kgString);
 
     if (cm <= 0) throw new Error("You need to specify a valid height in centimeters");
 

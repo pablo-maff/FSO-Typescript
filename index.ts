@@ -20,7 +20,13 @@ app.get('/bmi', (req, res) => {
 
     const calculatedBmi = calculateBmi(cm,kg);
 
-    res.status(200).send(calculatedBmi);
+    const response = {
+      weight: kg,
+      height: cm,
+      bmi: calculatedBmi
+    };
+
+    res.status(200).json(response);
   } catch(error: unknown) {
       let errorMessage = "Something went wrong:";
 
@@ -30,7 +36,7 @@ app.get('/bmi', (req, res) => {
 
       console.error(errorMessage);
 
-      res.status(400).send({
+      res.status(400).json({
       error: "malformatted parameters"
     });
   }

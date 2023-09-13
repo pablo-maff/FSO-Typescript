@@ -9,17 +9,31 @@ app.get('/hello', (_req, res) => {
 });
 
 app.get('/bmi', (req, res) => {
-  const {height, weight} = req.query
+  try {
+    const {height, weight} = req.query;
 
-  if (typeof height !== "string" || typeof weight !== "string") {
-    throw new Error("One of the parameters is not a string")
+    if (typeof height !== "string" || typeof weight !== "string") {
+      throw new Error("One of the parameters is not a string");
+    }
+
+    const { cm, kg } = parseBmiCalculatorArguments([height, weight]);
+
+    const calculatedBmi = calculateBmi(cm,kg);
+
+    res.status(200).send(calculatedBmi);
+  } catch(error: unknown) {
+      let errorMessage = "Something went wrong:";
+
+      if (error instanceof Error) {
+        errorMessage += " Error: " + error.message;
+      }
+
+      console.error(errorMessage);
+
+      res.status(400).send({
+      error: "malformatted parameters"
+    });
   }
-
-  const { cm, kg } = parseBmiCalculatorArguments([height, weight]);
-
-  const calculatedBmi = calculateBmi(cm,kg)
-
-  res.send(calculatedBmi);
 });
 
 const PORT = 3003;

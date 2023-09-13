@@ -1,5 +1,3 @@
-import {  parseBmiCalculatorArguments } from "./utils";
-
 export function calculateBmi(cm: number, kg: number): string {
   const centimeterToMeter = cm / 100;
 
@@ -28,17 +26,4 @@ export function calculateBmi(cm: number, kg: number): string {
   };
 
   return "Obese (Class III)";
-}
-
-try {
-  const { cm, kg } = parseBmiCalculatorArguments(process.argv);
-  console.log(calculateBmi(cm, kg));
-} catch (error: unknown) {
-  let errorMessage = "Something went wrong:";
-
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
-  }
-
-  console.error(errorMessage);
 }

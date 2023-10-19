@@ -34,25 +34,28 @@ interface ParsedExerciseValues {
   dailyExerciseHours: number[];
 }
 
-export function parseExerciseCalculatorArguments(args: string[]): ParsedExerciseValues {
-  if (args.length < 4) throw new Error("Not enough arguments");
-
-  const cleanArgs = args.slice(2);
-
-  const allArgsAreNumbers = !cleanArgs.some(arg => isNaN(Number(arg)));
-
-  if (allArgsAreNumbers) {
-    const dailyExerciseHours = cleanArgs.map(hours => Number(hours)).slice(1);
-
-    const allNumbersArePositive = dailyExerciseHours.some(n => n >= 0);
-
-    if (!allNumbersArePositive) throw new Error("Can't input negative numbers as hours");
-
-    return {
-      targetDailyAverageExerciseHours: Number(args[2]),
-      dailyExerciseHours: dailyExerciseHours
-    };
-  } else {
-    throw new Error("Provided values were not numbers!");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function parseExerciseCalculatorArguments(target: number, daily_exercises: any[]): ParsedExerciseValues {
+  if (!daily_exercises || !target) {
+    throw new Error('parameters missing');
   }
+
+  const allDailyExerciseValuesAreNumbers = !daily_exercises.some(arg => isNaN(Number(arg)));
+
+  if (typeof target !== 'number' || !allDailyExerciseValuesAreNumbers) {
+    throw new Error('malformatted parameters');
+  }
+
+  const dailyExerciseHours = daily_exercises.map(hours => Number(hours));
+
+  const allNumbersArePositive = dailyExerciseHours.every(n => n >= 0);
+
+  if (!allNumbersArePositive) {
+    throw new Error('malformatted paramaters');
+  }
+
+  return {
+    targetDailyAverageExerciseHours: target,
+    dailyExerciseHours: dailyExerciseHours
+  };
 }

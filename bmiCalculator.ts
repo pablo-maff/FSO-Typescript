@@ -23,7 +23,7 @@ export function calculateBmi(cm: number, kg: number): string {
   }
   else if (bmi <= 39.9) {
     return "Obese (Class II)";
-  };
+  }
 
   return "Obese (Class III)";
 }

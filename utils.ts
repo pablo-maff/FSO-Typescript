@@ -7,8 +7,8 @@ export function parseBmiCalculatorArguments(args: string[]): ParsedBmiValues {
   if (args.length < 2) throw new Error("Not enough arguments");
   if (args.length > 2) throw new Error("Too many arguments");
 
-  const cmString = args[0]
-  const kgString = args[1]
+  const cmString = args[0];
+  const kgString = args[1];
 
   const allArgsAreNumbers = !isNaN(Number(cmString)) && !isNaN(Number(kgString));
 
@@ -23,7 +23,7 @@ export function parseBmiCalculatorArguments(args: string[]): ParsedBmiValues {
     return {
       cm,
       kg
-    }
+    };
   } else {
     throw new Error("Provided values were not numbers!");
   }
@@ -51,7 +51,7 @@ export function parseExerciseCalculatorArguments(args: string[]): ParsedExercise
     return {
       targetDailyAverageExerciseHours: Number(args[2]),
       dailyExerciseHours: dailyExerciseHours
-    }
+    };
   } else {
     throw new Error("Provided values were not numbers!");
   }

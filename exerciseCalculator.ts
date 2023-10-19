@@ -43,7 +43,7 @@ function calculateExercises (targetDailyAverageExerciseHours: number, dailyExerc
     average: averageExerciseHours
   };
 
-  return exerciseReport
+  return exerciseReport;
 }
 
 try {

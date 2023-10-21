@@ -1,0 +1,28 @@
+{
+  "name": "fso-typescript",
+  "version": "1.0.0",
+  "description": "Exercises for Full Stack Open's Typescript part",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "dev": "ts-node-dev index.ts",
+    "ts-node": "ts-node",
+    "calculateExercises": "npm run ts-node exerciseCalculator.ts",
+    "lint": "eslint --ext .ts .",
+    "lint-fix": "eslint --ext .ts --fix ."
+  },
+  "author": "Pablo Maffioli",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "eslint": "^8.51.0",
+    "ts-node-dev": "^2.0.0"
+  }
+}

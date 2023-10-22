@@ -1,39 +1,50 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { DiaryEntry } from './types'
+import { createDiaryEntry, getAllDiaryEntries } from './services/diaryService'
 
-const baseURL = 'http://localhost:3000'
+const newEntryInitialState = {
+  date: '',
+  visibility: '',
+  weather: '',
+  comment: '',
+}
 
 function App() {
   const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([])
-  const [newEntry, setNewEntry] = useState({
-    date: '',
-    visibility: '',
-    weather: '',
-    comment: '',
-  })
+  const [newEntry, setNewEntry] = useState(newEntryInitialState)
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    axios.get<DiaryEntry[]>(`${baseURL}/api/diaries`).then((response) => {
-      setDiaryEntries(response.data)
+    getAllDiaryEntries().then((data) => {
+      setDiaryEntries(data)
     })
   }, [])
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function handleNewEntryInputs(event: { target: { value: any; name: any } }) {
+  function handleNewEntryInputs(event: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    target: { value: any; name: any }
+  }) {
     const { value, name } = event.target
 
     setNewEntry((prevEntry) => ({ ...prevEntry, [name]: value }))
   }
 
-  function handleAddEntry(event: React.SyntheticEvent) {
+  async function handleAddEntry(event: React.SyntheticEvent) {
     event.preventDefault()
+    try {
+      const newDiaryEntry = await createDiaryEntry(newEntry)
+      console.log('newDiaryEntry', newDiaryEntry)
 
-    axios
-      .post<DiaryEntry>(`${baseURL}/api/diaries`, newEntry)
-      .then((response) => {
-        setDiaryEntries((prevEntries) => prevEntries.concat(response.data))
-      })
+      setDiaryEntries((prevEntries) =>
+        prevEntries.concat(newDiaryEntry as DiaryEntry)
+      )
+      setNewEntry(newEntryInitialState)
+      setErrorMessage('')
+    } catch (error) {
+      if (error) {
+        setErrorMessage(error as string)
+      }
+    }
   }
 
   return (
@@ -43,6 +54,7 @@ function App() {
         aria-label="new flight diary entry"
       >
         <h2>Add New Entry</h2>
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <form onSubmit={handleAddEntry}>
           <div>
             <label htmlFor="new-diary-entry-date">Date</label>
@@ -50,6 +62,7 @@ function App() {
               type="text"
               id="new-diary-entry-date"
               name="date"
+              value={newEntry.date}
               onChange={handleNewEntryInputs}
             />
           </div>
@@ -59,6 +72,7 @@ function App() {
               type="text"
               id="new-diary-entry-visibility"
               name="visibility"
+              value={newEntry.visibility}
               onChange={handleNewEntryInputs}
             />
           </div>
@@ -68,6 +82,7 @@ function App() {
               type="text"
               id="new-diary-entry-weather"
               name="weather"
+              value={newEntry.weather}
               onChange={handleNewEntryInputs}
             />
           </div>
@@ -77,6 +92,7 @@ function App() {
               type="text"
               id="new-diary-entry-comment"
               name="comment"
+              value={newEntry.comment}
               onChange={handleNewEntryInputs}
             />
           </div>

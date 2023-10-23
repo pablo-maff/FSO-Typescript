@@ -52,18 +52,25 @@ const parseGender = (gender: unknown): Gender => {
   return gender;
 };
 
-const toNewPatient = (object: unknown): NewPatient => {
+const isObject = (object: unknown): object => {
   if (!object || typeof object !== 'object') {
     throw new Error('Incorrect or missing data');
   }
 
-  if ('name' in object && 'dateOfBirth' in object && 'ssn' in object && 'occupation' in object && 'gender' in object) {
+  return object;
+};
+
+const toNewPatient = (object: unknown): NewPatient => {
+  const parsedObject = isObject(object);
+
+  if ('name' in parsedObject && 'dateOfBirth' in parsedObject && 'ssn' in parsedObject && 'occupation' in parsedObject && 'gender' in parsedObject) {
     const newPatient: NewPatient = {
-      name: parseName(object.name),
-      dateOfBirth: parseDate(object.dateOfBirth),
-      ssn: parseSsn(object.ssn),
-      occupation: parseOccupation(object.occupation),
-      gender: parseGender(object.gender)
+      name: parseName(parsedObject.name),
+      dateOfBirth: parseDate(parsedObject.dateOfBirth),
+      ssn: parseSsn(parsedObject.ssn),
+      occupation: parseOccupation(parsedObject.occupation),
+      gender: parseGender(parsedObject.gender),
+      entries: []
     };
 
     return newPatient;
@@ -72,4 +79,25 @@ const toNewPatient = (object: unknown): NewPatient => {
   throw new Error('Icorrect data: some fields are missing');
 };
 
-export default toNewPatient;
+const parseId = (id: unknown): string => {
+  if (!isString(id)) {
+    throw new Error(`Incorrect or missing id ${id}`);
+  }
+
+  return id;
+};
+
+const extractRequestId = (object: unknown): string => {
+  const parsedObject = isObject(object);
+
+  if ('id' in parsedObject) {
+    return parseId(parsedObject.id);
+  }
+
+  throw new Error('Incorrect or missing id');
+};
+
+export {
+  toNewPatient,
+  extractRequestId
+};

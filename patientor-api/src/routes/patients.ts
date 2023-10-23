@@ -1,6 +1,6 @@
 import express from 'express';
 import patientsService from '../services/patientsService';
-import toNewPatient from '../utils';
+import { toNewPatient, extractRequestId } from '../utils';
 
 const router = express.Router();
 
@@ -8,6 +8,28 @@ router.get('/', (_req, res) => {
   const data = patientsService.getNonSensitivePatients();
 
   res.send(data);
+});
+
+router.get('/:id', (req, res) => {
+  try {
+    const id = extractRequestId(req.params);
+
+    const data = patientsService.getPatients();
+
+    const findPatient = data.find(patient => patient.id === id);
+
+    res.json(findPatient);
+  } catch(error: unknown) {
+    let errorMessage = 'Something went wrong.';
+
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+
+    res.status(400).json({
+      error: errorMessage
+    });
+  }
 });
 
 router.post('/', (req, res) => {

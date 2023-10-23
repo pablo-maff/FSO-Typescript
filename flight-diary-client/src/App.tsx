@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { DiaryEntry } from './types'
+import { DiaryEntry, NewDiaryEntry } from './types'
 import { createDiaryEntry, getAllDiaryEntries } from './services/diaryService'
+import { parseErrorMessage } from './utils'
 
-const newEntryInitialState = {
+const newEntryInitialState: NewDiaryEntry = {
   date: '',
   visibility: '',
   weather: '',
@@ -11,8 +12,8 @@ const newEntryInitialState = {
 
 function App() {
   const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([])
-  const [newEntry, setNewEntry] = useState(newEntryInitialState)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [newEntry, setNewEntry] = useState<NewDiaryEntry>(newEntryInitialState)
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   useEffect(() => {
     getAllDiaryEntries().then((data) => {
@@ -20,10 +21,9 @@ function App() {
     })
   }, [])
 
-  function handleNewEntryInputs(event: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    target: { value: any; name: any }
-  }) {
+  function handleNewEntryInputs(
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
     const { value, name } = event.target
 
     setNewEntry((prevEntry) => ({ ...prevEntry, [name]: value }))
@@ -33,7 +33,6 @@ function App() {
     event.preventDefault()
     try {
       const newDiaryEntry = await createDiaryEntry(newEntry)
-      console.log('newDiaryEntry', newDiaryEntry)
 
       setDiaryEntries((prevEntries) =>
         prevEntries.concat(newDiaryEntry as DiaryEntry)
@@ -42,7 +41,7 @@ function App() {
       setErrorMessage('')
     } catch (error) {
       if (error) {
-        setErrorMessage(error as string)
+        setErrorMessage(parseErrorMessage(error))
       }
     }
   }
@@ -56,54 +55,162 @@ function App() {
         <h2>Add New Entry</h2>
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <form onSubmit={handleAddEntry}>
-          <div>
-            <label htmlFor="new-diary-entry-date">Date</label>
-            <input
-              type="text"
-              id="new-diary-entry-date"
-              name="date"
-              value={newEntry.date}
-              onChange={handleNewEntryInputs}
-            />
-          </div>
-          <div>
-            <label htmlFor="new-diary-entry-visibility">Visibility</label>
-            <input
-              type="text"
-              id="new-diary-entry-visibility"
-              name="visibility"
-              value={newEntry.visibility}
-              onChange={handleNewEntryInputs}
-            />
-          </div>
-          <div>
-            <label htmlFor="new-diary-entry-weather">Weather</label>
-            <input
-              type="text"
-              id="new-diary-entry-weather"
-              name="weather"
-              value={newEntry.weather}
-              onChange={handleNewEntryInputs}
-            />
-          </div>
-          <div>
-            <label htmlFor="new-diary-entry-comment">Comment</label>
-            <input
-              type="text"
-              id="new-diary-entry-comment"
-              name="comment"
-              value={newEntry.comment}
-              onChange={handleNewEntryInputs}
-            />
-          </div>
-          <div>
-            <button
-              type="submit"
-              id="new-diary-entry-submit"
+          <fieldset style={{ padding: '8px' }}>
+            <legend>New Flight Diary Entry</legend>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div>
+                <label htmlFor="new-diary-entry-date">Date</label>
+                <label aria-required="true">*</label>
+              </div>
+              <input
+                type="date"
+                id="new-diary-entry-date"
+                name="date"
+                required
+                value={newEntry.date}
+                onChange={handleNewEntryInputs}
+              />
+            </div>
+            <fieldset
+              style={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                margin: '8px 0',
+              }}
+              aria-required="true"
             >
-              Add
-            </button>
-          </div>
+              <legend>Weather*</legend>
+              <div id="weather-container">
+                <label htmlFor="new-diary-entry-weather-sunny">Sunny</label>
+                <input
+                  type="radio"
+                  id="new-diary-entry-weather-sunny"
+                  name="weather"
+                  value="sunny"
+                  onChange={handleNewEntryInputs}
+                  checked={newEntry.weather === 'sunny'}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="new-diary-entry-weather-windy">Windy</label>
+                <input
+                  type="radio"
+                  id="new-diary-entry-weather-windy"
+                  name="weather"
+                  value="windy"
+                  onChange={handleNewEntryInputs}
+                  checked={newEntry.weather === 'windy'}
+                />
+              </div>
+              <div>
+                <label htmlFor="new-diary-entry-weather-cloudy">Cloudy</label>
+                <input
+                  type="radio"
+                  id="new-diary-entry-weather-cloudy"
+                  name="weather"
+                  value="cloudy"
+                  onChange={handleNewEntryInputs}
+                  checked={newEntry.weather === 'cloudy'}
+                />
+              </div>
+              <div>
+                <label htmlFor="new-diary-entry-weather-rainy">Rainy</label>
+                <input
+                  type="radio"
+                  id="new-diary-entry-weather-rainy"
+                  name="weather"
+                  value="rainy"
+                  onChange={handleNewEntryInputs}
+                  checked={newEntry.weather === 'rainy'}
+                />
+              </div>
+              <div>
+                <label htmlFor="new-diary-entry-weather-stormy">Stormy</label>
+                <input
+                  type="radio"
+                  id="new-diary-entry-weather-stormy"
+                  name="weather"
+                  value="stormy"
+                  onChange={handleNewEntryInputs}
+                  checked={newEntry.weather === 'stormy'}
+                />
+              </div>
+            </fieldset>
+            <fieldset
+              style={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                margin: '8px 0',
+              }}
+              aria-required="true"
+            >
+              <legend>Visibility*</legend>
+              <div id="visibility-container">
+                <label htmlFor="new-diary-entry-visibility-great">Great</label>
+                <input
+                  type="radio"
+                  id="new-diary-entry-visibility-great"
+                  name="visibility"
+                  value="great"
+                  onChange={handleNewEntryInputs}
+                  checked={newEntry.visibility === 'great'}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="new-diary-entry-visibility-good">Good</label>
+                <input
+                  type="radio"
+                  id="new-diary-entry-visibility-good"
+                  name="visibility"
+                  value="good"
+                  onChange={handleNewEntryInputs}
+                  checked={newEntry.visibility === 'good'}
+                />
+              </div>
+              <div>
+                <label htmlFor="new-diary-entry-visibility-ok">Ok</label>
+                <input
+                  type="radio"
+                  id="new-diary-entry-visibility-ok"
+                  name="visibility"
+                  value="ok"
+                  onChange={handleNewEntryInputs}
+                  checked={newEntry.visibility === 'ok'}
+                />
+              </div>
+              <div>
+                <label htmlFor="new-diary-entry-visibility-poor">Poor</label>
+                <input
+                  type="radio"
+                  id="new-diary-entry-visibility-poor"
+                  name="visibility"
+                  value="poor"
+                  onChange={handleNewEntryInputs}
+                  checked={newEntry.visibility === 'poor'}
+                />
+              </div>
+            </fieldset>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <label htmlFor="new-diary-entry-comment">Comment</label>
+              <textarea
+                id="new-diary-entry-comment"
+                name="comment"
+                value={newEntry.comment}
+                onChange={handleNewEntryInputs}
+              />
+            </div>
+            <div style={{ padding: '8px 0', textAlign: 'right' }}>
+              <button
+                type="submit"
+                id="new-diary-entry-submit"
+                style={{ padding: '8px 32px' }}
+              >
+                Add
+              </button>
+            </div>
+          </fieldset>
         </form>
       </section>
       <section

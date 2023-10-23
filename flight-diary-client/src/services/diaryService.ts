@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { DiaryEntry, ValidationError } from '../types'
+import { DiaryEntry, NewDiaryEntry, ValidationError } from '../types'
 
 const baseURL = 'http://localhost:3000/api/diaries'
 
@@ -7,12 +7,7 @@ export function getAllDiaryEntries() {
   return axios.get<DiaryEntry[]>(baseURL).then((response) => response.data)
 }
 
-export async function createDiaryEntry(object: {
-  date: string
-  visibility: string
-  weather: string
-  comment: string
-}) {
+export async function createDiaryEntry(object: NewDiaryEntry) {
   try {
     const newDiary = await axios.post<DiaryEntry>(baseURL, object)
 

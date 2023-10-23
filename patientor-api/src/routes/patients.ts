@@ -18,6 +18,10 @@ router.get('/:id', (req, res) => {
 
     const findPatient = data.find(patient => patient.id === id);
 
+    if (!findPatient) {
+      throw new Error(`Patient doesn't exist: id: ${id}`);
+    }
+
     res.json(findPatient);
   } catch(error: unknown) {
     let errorMessage = 'Something went wrong.';
@@ -26,9 +30,7 @@ router.get('/:id', (req, res) => {
       errorMessage += ' Error: ' + error.message;
     }
 
-    res.status(400).json({
-      error: errorMessage
-    });
+    res.status(400).send(errorMessage);
   }
 });
 
@@ -46,9 +48,7 @@ router.post('/', (req, res) => {
         errorMessage += ' Error: ' + error.message;
       }
 
-      res.status(400).json({
-        error: errorMessage
-      });
+      res.status(400).send(errorMessage);
     }
   });
 

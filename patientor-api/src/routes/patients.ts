@@ -1,40 +1,34 @@
-import express from 'express';
-import patientsService from '../services/patientsService';
-import { toNewPatient, extractRequestId } from '../utils';
+import express from "express";
+import patientsService from "../services/patientsService";
+import { toNewPatient, extractRequestId } from "../utils";
 
 const router = express.Router();
 
-router.get('/', (_req, res) => {
+router.get("/", (_req, res) => {
   const data = patientsService.getNonSensitivePatients();
 
   res.send(data);
 });
 
-router.get('/:id', (req, res) => {
+router.get("/:id", (req, res) => {
   try {
     const id = extractRequestId(req.params);
 
-    const data = patientsService.getPatients();
+    const patient = patientsService.getPatient(id);
 
-    const findPatient = data.find(patient => patient.id === id);
-
-    if (!findPatient) {
-      throw new Error(`Patient doesn't exist: id: ${id}`);
-    }
-
-    res.json(findPatient);
-  } catch(error: unknown) {
-    let errorMessage = 'Something went wrong.';
+    res.json(patient);
+  } catch (error: unknown) {
+    let errorMessage = "Something went wrong.";
 
     if (error instanceof Error) {
-      errorMessage += ' Error: ' + error.message;
+      errorMessage += " Error: " + error.message;
     }
 
     res.status(400).send(errorMessage);
   }
 });
 
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   try {
     const newPatient = toNewPatient(req.body);
 
@@ -42,14 +36,14 @@ router.post('/', (req, res) => {
 
     res.status(201).json(addedPatient);
   } catch (error: unknown) {
-      let errorMessage = 'Something went wrong.';
+    let errorMessage = "Something went wrong.";
 
-      if (error instanceof Error) {
-        errorMessage += ' Error: ' + error.message;
-      }
-
-      res.status(400).send(errorMessage);
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
     }
-  });
+
+    res.status(400).send(errorMessage);
+  }
+});
 
 export default router;

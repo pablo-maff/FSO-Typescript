@@ -17,6 +17,16 @@ const getPatients = (): Patient[] => {
   return patients;
 };
 
+const getPatient = (id: string): Patient => {
+  const findPatient = patients.find((patient) => patient.id === id);
+
+  if (!findPatient) {
+    throw new Error(`Patient doesn't exist: id: ${id}`);
+  }
+
+  return findPatient;
+};
+
 const getNonSensitivePatients = (): NonSensitivePatient[] => {
   return nonSensitivePatients;
 };
@@ -36,6 +46,7 @@ const addPatient = (patient: NewPatient): Patient => {
 
 export default {
   getPatients,
+  getPatient,
   getNonSensitivePatients,
   addPatient,
 };

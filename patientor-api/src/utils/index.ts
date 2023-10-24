@@ -1,7 +1,7 @@
 import { Gender, NewPatient } from "../types";
 
 const isString = (text: unknown): text is string => {
-  return typeof text === 'string' || text instanceof String;
+  return typeof text === "string" || text instanceof String;
 };
 
 const parseName = (name: unknown): string => {
@@ -41,7 +41,9 @@ const parseOccupation = (occupation: unknown): string => {
 };
 
 const isGender = (param: string): param is Gender => {
-  return Object.values(Gender).map(v => v.toString()).includes(param);
+  return Object.values(Gender)
+    .map((v) => v.toString())
+    .includes(param);
 };
 
 const parseGender = (gender: unknown): Gender => {
@@ -53,8 +55,8 @@ const parseGender = (gender: unknown): Gender => {
 };
 
 const isObject = (object: unknown): object => {
-  if (!object || typeof object !== 'object') {
-    throw new Error('Incorrect or missing data');
+  if (!object || typeof object !== "object") {
+    throw new Error("Incorrect or missing data");
   }
 
   return object;
@@ -63,21 +65,64 @@ const isObject = (object: unknown): object => {
 const toNewPatient = (object: unknown): NewPatient => {
   const parsedObject = isObject(object);
 
-  if ('name' in parsedObject && 'dateOfBirth' in parsedObject && 'ssn' in parsedObject && 'occupation' in parsedObject && 'gender' in parsedObject) {
+  if (
+    "name" in parsedObject &&
+    "dateOfBirth" in parsedObject &&
+    "ssn" in parsedObject &&
+    "occupation" in parsedObject &&
+    "gender" in parsedObject
+  ) {
     const newPatient: NewPatient = {
       name: parseName(parsedObject.name),
       dateOfBirth: parseDate(parsedObject.dateOfBirth),
       ssn: parseSsn(parsedObject.ssn),
       occupation: parseOccupation(parsedObject.occupation),
       gender: parseGender(parsedObject.gender),
-      entries: []
+      entries: [],
     };
 
     return newPatient;
   }
 
-  throw new Error('Icorrect data: some fields are missing');
+  throw new Error("Icorrect data: some fields are missing");
 };
+
+// const isEntry = (param: string): param is EntryType => {
+//   return Object.values(EntryType)
+//     .map((e) => e.toString())
+//     .includes(param);
+// };
+
+// const parseEntryType = (entryType: unknown): EntryType => {
+//   if (!entryType || !isString(entryType) || !isEntry(entryType)) {
+//     throw new Error(`Incorrect or missing entry type ${entryType}`);
+//   }
+
+//   return entryType;
+// };
+
+// const parseEntries = (object: unknown): BaseEntry => {
+//   const parsedObject = isObject(object);
+
+//   if (
+//     "type" in parsedObject &&
+//     "id" in parsedObject &&
+//     "description" in parsedObject &&
+//     "date" in parsedObject &&
+//     "specialist" in parsedObject
+//   ) {
+//     const entry: BaseEntry = {
+//       id: parsedObject.id,
+//       description: parsedObject.description,
+//       type: parseEntryType(parsedObject.type),
+//       date: parsedObject.date,
+//       specialist: parsedObject.specialist
+//     };
+//     return entry;
+//   }
+
+//   throw new Error("Incorrect data: some fields are missing")
+// };
 
 const parseId = (id: unknown): string => {
   if (!isString(id)) {
@@ -90,14 +135,11 @@ const parseId = (id: unknown): string => {
 const extractRequestId = (object: unknown): string => {
   const parsedObject = isObject(object);
 
-  if ('id' in parsedObject) {
+  if ("id" in parsedObject) {
     return parseId(parsedObject.id);
   }
 
-  throw new Error('Incorrect or missing id');
+  throw new Error("Incorrect or missing id");
 };
 
-export {
-  toNewPatient,
-  extractRequestId
-};
+export { toNewPatient, extractRequestId };

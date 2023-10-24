@@ -2,7 +2,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
   ],
   "plugins": ["@typescript-eslint"],
   "env": {
@@ -21,7 +22,9 @@
       "error",
       { "argsIgnorePattern": "^_" }
     ],
-    "no-case-declarations": "off"
+    "no-case-declarations": "off",
+    "eqeqeq": "error",
+    "no-console": 0
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {

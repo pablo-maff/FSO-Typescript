@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 import { Diagnose, Patient } from "../../types";
-import { Box, List, ListItem, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import patientService from "../../services/patients";
 import PatientGender from "./PatientGender";
 import { Entry } from "../../types";
 import diagnoseService from "../../services/diagnoses";
+import PatientEntry from "./Entries";
 
 function assertIsString(value: unknown): asserts value is string {
   if (typeof value !== "string") {
@@ -20,8 +21,6 @@ const PatientPage = () => {
   const { id } = useParams();
 
   assertIsString(id);
-
-  console.log("diagnoses", diagnoses);
 
   useEffect(() => {
     const fetchPatient = async (id: string): Promise<void> => {
@@ -53,8 +52,6 @@ const PatientPage = () => {
     return <p style={{ color: "red" }}>The selected patient was not found</p>;
   }
 
-  console.log("patient", patient);
-
   return (
     <Box sx={{ mt: 4 }}>
       <Box sx={{ display: "flex" }}>
@@ -69,33 +66,11 @@ const PatientPage = () => {
       <Box sx={{ mt: 2 }}>
         <Typography variant="h6">Entries</Typography>
         {patient.entries.map((entry: Entry) => (
-          <Box key={entry.id}>
-            <Box>
-              <Typography sx={{ display: "inline-block" }}>
-                {entry.date}
-              </Typography>
-              <Typography
-                sx={{ fontStyle: "italic", display: "inline-block", ml: 2 }}
-              >
-                {entry.description}
-              </Typography>
-            </Box>
-            <List sx={{ listStyleType: "disc", pl: 4 }}>
-              {entry.diagnosisCodes?.map((code, i) => (
-                <ListItem
-                  key={i}
-                  sx={{ display: "list-item" }}
-                >
-                  <Typography sx={{ display: "inline-block" }}>
-                    {code}
-                  </Typography>
-                  <Typography sx={{ display: "inline-block", ml: 1 }}>
-                    {diagnoses.find((d) => d.code === code)?.name}
-                  </Typography>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
+          <PatientEntry
+            key={entry.id}
+            entry={entry}
+            diagnoses={diagnoses}
+          />
         ))}
       </Box>
     </Box>

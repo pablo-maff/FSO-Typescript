@@ -1,7 +1,7 @@
 node_modules
 vite.config.ts
 dist
-.eslintrc.js
+.eslintrc.cjs
 .prettierrc.json
 tsconfig.json
 tsconfig.node.json

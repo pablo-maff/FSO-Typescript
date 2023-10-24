@@ -2,7 +2,7 @@ build
 node_modules
 .eslintrc
 .prettierrc.json
-.prettierignore
+.eslintignore
 package-lock.json
 package.json
 tsconfig.json

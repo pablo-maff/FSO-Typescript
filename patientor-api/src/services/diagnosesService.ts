@@ -1,5 +1,5 @@
-import diagnosesData from '../../data/diagnoses';
-import { Diagnose } from '../types';
+import diagnosesData from "../../data/diagnoses";
+import { Diagnose } from "../types";
 
 const diagnoses: Diagnose[] = diagnosesData;
 
@@ -8,5 +8,5 @@ const getDiagnoses = (): Diagnose[] => {
 };
 
 export default {
-  getDiagnoses
+  getDiagnoses,
 };

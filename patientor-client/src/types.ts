@@ -1,9 +1,3 @@
-export interface Diagnosis {
-  code: string;
-  name: string;
-  latin?: string;
-}
-
 export enum Gender {
   Male = "male",
   Female = "female",
@@ -24,7 +18,7 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnose["code"]>;
 }
 
-enum HealthCheckRating {
+export enum HealthCheckRating {
   Healthy = 0,
   LowRisk = 1,
   HighRisk = 2,
@@ -37,7 +31,7 @@ export enum EntryType {
   Hospital = "Hospital",
 }
 
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: EntryType.HealthCheck;
   healthCheckRating: HealthCheckRating;
 }
@@ -47,7 +41,7 @@ interface SickLeave {
   endDate: string;
 }
 
-interface OccupationalHealthcareEntry extends BaseEntry {
+export interface OccupationalHealthcareEntry extends BaseEntry {
   type: EntryType.OccupationalHealthcare;
   employerName: string;
   sickLeave?: SickLeave;
@@ -58,7 +52,7 @@ interface Discharge {
   criteria: string;
 }
 
-interface HospitalEntry extends BaseEntry {
+export interface HospitalEntry extends BaseEntry {
   type: EntryType.Hospital;
   discharge: Discharge;
 }

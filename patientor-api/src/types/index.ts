@@ -12,7 +12,7 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnose["code"]>;
 }
 
-enum HealthCheckRating {
+export enum HealthCheckRating {
   Healthy = 0,
   LowRisk = 1,
   HighRisk = 2,
@@ -30,7 +30,7 @@ interface HealthCheckEntry extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
-interface SickLeave {
+export interface SickLeave {
   startDate: string;
   endDate: string;
 }
@@ -41,7 +41,7 @@ interface OccupationalHealthcareEntry extends BaseEntry {
   sickLeave?: SickLeave;
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria: string;
 }
@@ -69,6 +69,13 @@ export interface Patient {
 export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
 
 export type NewPatient = Omit<Patient, "id">;
+
+// * Define special omit for unions https://github.com/microsoft/TypeScript/issues/42680
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+
+export type NewEntry = UnionOmit<Entry, "id">;
 
 export enum Gender {
   Male = "male",

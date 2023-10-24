@@ -4,9 +4,10 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { Button, Divider, Container, Typography } from "@mui/material";
 
 import { apiBaseUrl } from "./constants";
-import { Patient } from "./types";
+import { Diagnose, Patient } from "./types";
 
 import patientService from "./services/patients";
+import diagnoseService from "./services/diagnoses";
 import PatientListPage from "./components/PatientListPage";
 import PatientPage from "./components/PatientPage";
 

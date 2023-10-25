@@ -74,6 +74,8 @@ export interface Patient {
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
 
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, "id">;
+
 export interface ValidationError {
   message: string;
   errors: Record<string, string[]>;

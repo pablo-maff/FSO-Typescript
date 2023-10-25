@@ -124,7 +124,11 @@ const parseDiagnosisCodes = (object: unknown): Array<Diagnose["code"]> => {
 };
 
 const isNumber = (value: unknown): value is number => {
-  return typeof value === "number" || value instanceof Number;
+  return (
+    typeof value === "number" ||
+    value instanceof Number ||
+    !isNaN(Number(value))
+  );
 };
 
 const isHealthCheckRating = (param: number): param is HealthCheckRating => {
@@ -139,9 +143,9 @@ const parseHealthCheckRating = (object: unknown): HealthCheckRating => {
   if (
     "healthCheckRating" in parsedObject &&
     isNumber(parsedObject.healthCheckRating) &&
-    isHealthCheckRating(parsedObject.healthCheckRating)
+    isHealthCheckRating(Number(parsedObject.healthCheckRating))
   ) {
-    return parsedObject.healthCheckRating;
+    return Number(parsedObject.healthCheckRating);
   }
 
   throw new Error(`Incorrect or missing healthCheckRating`);

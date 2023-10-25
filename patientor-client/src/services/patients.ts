@@ -1,5 +1,11 @@
 import axios from "axios";
-import { Patient, PatientFormValues, ValidationError } from "../types";
+import {
+  HealthCheckEntry,
+  NewHealthCheckEntry,
+  Patient,
+  PatientFormValues,
+  ValidationError,
+} from "../types";
 
 import { apiBaseUrl } from "../constants";
 
@@ -30,8 +36,30 @@ const create = async (object: PatientFormValues) => {
   return data;
 };
 
+export async function createEntry(
+  patientId: string,
+  object: NewHealthCheckEntry
+) {
+  try {
+    const newEntry = await axios.post<HealthCheckEntry>(
+      `${apiBaseUrl}/patients/${patientId}/entries`,
+      object
+    );
+
+    return newEntry.data as HealthCheckEntry;
+  } catch (error) {
+    if (
+      axios.isAxiosError<ValidationError, Record<string, unknown>>(error) &&
+      error.response
+    ) {
+      throw error.response.data;
+    }
+  }
+}
+
 export default {
   getAll,
   get,
   create,
+  createEntry,
 };

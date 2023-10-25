@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
 import { Diagnose, Patient } from "../../types";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import patientService from "../../services/patients";
 import PatientGender from "./PatientGender";
 import { Entry } from "../../types";
 import diagnoseService from "../../services/diagnoses";
 import PatientEntry from "./Entries";
+import EntryForm from "./Entries/EntryForm";
 
 function assertIsString(value: unknown): asserts value is string {
   if (typeof value !== "string") {
@@ -17,6 +18,7 @@ function assertIsString(value: unknown): asserts value is string {
 const PatientPage = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnose[]>([]);
+  const [showEntryForm, setShowEntryForm] = useState<boolean>(false);
 
   const { id } = useParams();
 
@@ -63,6 +65,22 @@ const PatientPage = () => {
         <Typography>Birthday: {patient.dateOfBirth}</Typography>
         <Typography>SSN: {patient.ssn}</Typography>
       </Box>
+      <Box sx={{ my: 2 }}>
+        <Button
+          variant="contained"
+          onClick={() => setShowEntryForm(!showEntryForm)}
+        >
+          <Typography>{!showEntryForm ? "Add Entry" : "Hide Form"}</Typography>
+        </Button>
+      </Box>
+      {showEntryForm && (
+        <EntryForm
+          patientId={id}
+          setPatient={
+            setPatient as React.Dispatch<React.SetStateAction<Patient>>
+          }
+        />
+      )}
       <Box sx={{ mt: 2 }}>
         <Typography variant="h6">Entries</Typography>
         {patient.entries.map((entry: Entry) => (

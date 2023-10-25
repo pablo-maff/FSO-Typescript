@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
-  HealthCheckEntry,
-  NewHealthCheckEntry,
+  Entry,
+  NewEntry,
   Patient,
   PatientFormValues,
   ValidationError,
@@ -36,17 +36,14 @@ const create = async (object: PatientFormValues) => {
   return data;
 };
 
-export async function createEntry(
-  patientId: string,
-  object: NewHealthCheckEntry
-) {
+export async function createEntry(patientId: string, object: NewEntry) {
   try {
-    const newEntry = await axios.post<HealthCheckEntry>(
+    const newEntry = await axios.post<Entry>(
       `${apiBaseUrl}/patients/${patientId}/entries`,
       object
     );
 
-    return newEntry.data as HealthCheckEntry;
+    return newEntry.data;
   } catch (error) {
     if (
       axios.isAxiosError<ValidationError, Record<string, unknown>>(error) &&

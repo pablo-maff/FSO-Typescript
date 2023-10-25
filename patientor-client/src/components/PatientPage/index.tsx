@@ -1,6 +1,15 @@
 import { useParams } from "react-router-dom";
-import { Diagnose, Patient } from "../../types";
-import { Box, Button, Typography } from "@mui/material";
+import { Diagnose, EntryType, Patient } from "../../types";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import patientService from "../../services/patients";
 import PatientGender from "./PatientGender";
@@ -19,6 +28,9 @@ const PatientPage = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnose[]>([]);
   const [showEntryForm, setShowEntryForm] = useState<boolean>(false);
+  const [newEntryType, setNewEntryType] = useState<EntryType>(
+    EntryType.HealthCheck
+  );
 
   const { id } = useParams();
 
@@ -50,6 +62,10 @@ const PatientPage = () => {
     void fetchDiagnoseList();
   }, []);
 
+  const handleSelectNewEntryType = (event: SelectChangeEvent) => {
+    setNewEntryType(event.target.value as EntryType);
+  };
+
   if (!patient) {
     return <p style={{ color: "red" }}>The selected patient was not found</p>;
   }
@@ -65,21 +81,43 @@ const PatientPage = () => {
         <Typography>Birthday: {patient.dateOfBirth}</Typography>
         <Typography>SSN: {patient.ssn}</Typography>
       </Box>
-      <Box sx={{ my: 2 }}>
-        <Button
-          variant="contained"
-          onClick={() => setShowEntryForm(!showEntryForm)}
-        >
-          <Typography>{!showEntryForm ? "Add Entry" : "Hide Form"}</Typography>
-        </Button>
-      </Box>
+      <Button
+        variant="contained"
+        sx={{ mt: 4, mb: 2 }}
+        onClick={() => setShowEntryForm(!showEntryForm)}
+      >
+        <Typography>{!showEntryForm ? "Add Entry" : "Hide Form"}</Typography>
+      </Button>
       {showEntryForm && (
-        <EntryForm
-          patientId={id}
-          setPatient={
-            setPatient as React.Dispatch<React.SetStateAction<Patient>>
-          }
-        />
+        <>
+          <Box sx={{ my: 2 }}>
+            <FormControl sx={{ minWidth: "250px" }}>
+              <InputLabel id="select-new-entry-type-label">
+                New Entry Type
+              </InputLabel>
+              <Select
+                labelId="select-new-entry-type-label"
+                id="select-new-entry-type"
+                value={newEntryType}
+                label="New Entry Type"
+                onChange={handleSelectNewEntryType}
+              >
+                <MenuItem value={EntryType.HealthCheck}>HealthCheck</MenuItem>
+                <MenuItem value={EntryType.Hospital}>Hospital</MenuItem>
+                <MenuItem value={EntryType.OccupationalHealthcare}>
+                  Occupational Healthcare
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <EntryForm
+            patientId={id}
+            newEntryType={newEntryType}
+            setPatient={
+              setPatient as React.Dispatch<React.SetStateAction<Patient>>
+            }
+          />
+        </>
       )}
       <Box sx={{ mt: 2 }}>
         <Typography variant="h6">Entries</Typography>

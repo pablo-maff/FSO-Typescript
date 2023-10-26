@@ -12,12 +12,13 @@ import {
 import axios from "axios";
 
 import { PatientFormValues, Patient } from "../../types";
-import AddPatientModal from "../AddPatientModal";
+import ModalWrapper from "../Public/ModalWrapper";
 
 import HealthRatingBar from "../Public/HealthRatingBar";
 
 import patientService from "../../services/patients";
 import { Link } from "react-router-dom";
+import AddPatientForm from "./AddPatientForm";
 
 interface Props {
   patients: Patient[];
@@ -96,12 +97,17 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
           ))}
         </TableBody>
       </Table>
-      <AddPatientModal
+      <ModalWrapper
+        title="Add a new patient"
         modalOpen={modalOpen}
-        onSubmit={submitNewPatient}
         error={error}
         onClose={closeModal}
-      />
+      >
+        <AddPatientForm
+          onSubmit={submitNewPatient}
+          onCancel={closeModal}
+        />
+      </ModalWrapper>
       <Button
         variant="contained"
         onClick={() => openModal()}

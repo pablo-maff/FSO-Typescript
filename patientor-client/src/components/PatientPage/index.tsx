@@ -1,22 +1,13 @@
 import { useParams } from "react-router-dom";
-import { Diagnose, EntryType, Patient } from "../../types";
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { Diagnose, Patient } from "../../types";
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import patientService from "../../services/patients";
 import PatientGender from "./PatientGender";
 import { Entry } from "../../types";
 import diagnoseService from "../../services/diagnoses";
 import PatientEntry from "./Entries";
-import EntryForm from "./Entries/EntryForm";
+import AddEntryForm from "./Entries/AddEntryForm";
 
 function assertIsString(value: unknown): asserts value is string {
   if (typeof value !== "string") {
@@ -28,9 +19,6 @@ const PatientPage = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnose[]>([]);
   const [showEntryForm, setShowEntryForm] = useState<boolean>(false);
-  const [newEntryType, setNewEntryType] = useState<EntryType>(
-    EntryType.HealthCheck
-  );
 
   const { id } = useParams();
 
@@ -62,10 +50,6 @@ const PatientPage = () => {
     void fetchDiagnoseList();
   }, []);
 
-  const handleSelectNewEntryType = (event: SelectChangeEvent) => {
-    setNewEntryType(event.target.value as EntryType);
-  };
-
   if (!patient) {
     return (
       <Typography sx={{ color: "red" }}>
@@ -90,39 +74,18 @@ const PatientPage = () => {
         sx={{ mt: 4, mb: 2 }}
         onClick={() => setShowEntryForm(!showEntryForm)}
       >
-        <Typography>{!showEntryForm ? "Add Entry" : "Hide Form"}</Typography>
+        <Typography>{"Add Entry"}</Typography>
       </Button>
       {showEntryForm && (
-        <>
-          <Box sx={{ my: 2 }}>
-            <FormControl sx={{ minWidth: "250px" }}>
-              <InputLabel id="select-new-entry-type-label">
-                New Entry Type
-              </InputLabel>
-              <Select
-                labelId="select-new-entry-type-label"
-                id="select-new-entry-type"
-                value={newEntryType}
-                label="New Entry Type"
-                onChange={handleSelectNewEntryType}
-              >
-                <MenuItem value={EntryType.HealthCheck}>HealthCheck</MenuItem>
-                <MenuItem value={EntryType.Hospital}>Hospital</MenuItem>
-                <MenuItem value={EntryType.OccupationalHealthcare}>
-                  Occupational Healthcare
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <EntryForm
-            patientId={id}
-            newEntryType={newEntryType}
-            diagnoses={diagnoses}
-            setPatient={
-              setPatient as React.Dispatch<React.SetStateAction<Patient>> // TODO
-            }
-          />
-        </>
+        <AddEntryForm
+          patientId={id}
+          diagnoses={diagnoses}
+          setPatient={
+            setPatient as React.Dispatch<React.SetStateAction<Patient>>
+          }
+          modalOpen={showEntryForm}
+          setModalOpen={setShowEntryForm}
+        />
       )}
       <Box sx={{ mt: 2 }}>
         <Typography variant="h6">Entries</Typography>

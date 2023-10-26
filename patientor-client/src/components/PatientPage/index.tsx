@@ -67,7 +67,11 @@ const PatientPage = () => {
   };
 
   if (!patient) {
-    return <p style={{ color: "red" }}>The selected patient was not found</p>;
+    return (
+      <Typography sx={{ color: "red" }}>
+        The selected patient was not found
+      </Typography>
+    );
   }
 
   return (
@@ -113,8 +117,9 @@ const PatientPage = () => {
           <EntryForm
             patientId={id}
             newEntryType={newEntryType}
+            diagnoses={diagnoses}
             setPatient={
-              setPatient as React.Dispatch<React.SetStateAction<Patient>>
+              setPatient as React.Dispatch<React.SetStateAction<Patient>> // TODO
             }
           />
         </>

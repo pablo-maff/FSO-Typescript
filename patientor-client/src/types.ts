@@ -10,7 +10,7 @@ export interface Diagnose {
   latin?: string;
 }
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -82,6 +82,8 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
 export type NewEntry = UnionOmit<Entry, "id">;
 
 export type NewHealthCheckEntry = Omit<HealthCheckEntry, "id">;
+
+export type NewBaseEntry = Omit<BaseEntry, "id" | "date" | "diagnosisCodes">;
 
 export interface ValidationError {
   message: string;

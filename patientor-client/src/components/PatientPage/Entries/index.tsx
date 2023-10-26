@@ -1,4 +1,5 @@
 import { Diagnose, Entry, EntryType } from "../../../types";
+import { assertNever } from "../../../utils";
 import DiagnosesList from "./DiagnosesList";
 import ShowHealthCheckEntry from "./HealthCheckEntry";
 import ShowHospitalEntry from "./HospitalEntry";
@@ -8,15 +9,6 @@ interface Props {
   entry: Entry;
   diagnoses: Diagnose[];
 }
-
-/**
- * Helper function for exhaustive type checking
- */
-const assertNever = (value: never): never => {
-  throw new Error(
-    `Unhandled discriminated union member: ${JSON.stringify(value)}`
-  );
-};
 
 const PatientEntry = ({ entry, diagnoses }: Props) => {
   switch (entry.type) {

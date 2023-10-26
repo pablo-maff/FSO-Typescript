@@ -30,7 +30,6 @@ const OccupationalHealthcareEntryForm = ({ handleAddEntry }: Props) => {
 
   function handleNewEntryInputs(event: React.ChangeEvent<HTMLInputElement>) {
     const { value, name } = event.target;
-    console.log("name", name);
     if (name !== "sickLeave.startDate" && name !== "sickLeave.endDate") {
       return setNewEntry((prevEntry) => {
         return { ...prevEntry, [name]: value };

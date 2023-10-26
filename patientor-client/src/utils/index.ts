@@ -10,4 +10,13 @@ function parseErrorMessage(message: unknown): string {
   return message;
 }
 
-export { isString, parseErrorMessage };
+/**
+ * Helper function for exhaustive type checking
+ */
+function assertNever(value: never): never {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+}
+
+export { isString, parseErrorMessage, assertNever };

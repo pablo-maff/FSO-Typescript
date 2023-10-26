@@ -25,7 +25,7 @@ interface Props {
 const HospitalEntryForm = ({ handleAddEntry }: Props) => {
   const [newEntry, setNewEntry] = useState<NewEntry>(initialEntryState);
 
-  if (newEntry.type !== "Hospital") return;
+  if (newEntry.type !== EntryType.Hospital) return;
 
   function handleNewEntryInputs(event: React.ChangeEvent<HTMLInputElement>) {
     const { value, name } = event.target;
@@ -33,7 +33,7 @@ const HospitalEntryForm = ({ handleAddEntry }: Props) => {
     if (name === "discharge.date" || name === "discharge.criteria") {
       // * If the name is 'discharge.date' or 'discharge.criteria', update the corresponding property in the discharge object
       setNewEntry((prevEntry) => {
-        if (prevEntry.type !== "Hospital") return prevEntry;
+        if (prevEntry.type !== EntryType.Hospital) return prevEntry;
 
         return {
           ...prevEntry,
@@ -51,7 +51,6 @@ const HospitalEntryForm = ({ handleAddEntry }: Props) => {
   }
 
   const submitForm = (event: React.FormEvent) => {
-    console.log("newEntry", newEntry);
     handleAddEntry(event, newEntry).then(() => {
       setNewEntry(initialEntryState);
     });

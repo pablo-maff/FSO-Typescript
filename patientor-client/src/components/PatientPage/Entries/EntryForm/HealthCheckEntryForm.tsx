@@ -22,7 +22,7 @@ interface Props {
 const HealthCheckEntryForm = ({ handleAddEntry }: Props) => {
   const [newEntry, setNewEntry] = useState<NewEntry>(initialEntryState);
 
-  if (newEntry.type !== "HealthCheck") return;
+  if (newEntry.type !== EntryType.HealthCheck) return;
 
   function handleNewEntryInputs(event: React.ChangeEvent<HTMLInputElement>) {
     const { value, name } = event.target;
@@ -47,8 +47,9 @@ const HealthCheckEntryForm = ({ handleAddEntry }: Props) => {
   }
 
   const submitForm = (event: React.FormEvent) => {
-    handleAddEntry(event, newEntry);
-    setNewEntry(initialEntryState);
+    handleAddEntry(event, newEntry).then(() => {
+      setNewEntry(initialEntryState);
+    });
   };
 
   return (
